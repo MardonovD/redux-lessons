@@ -3,12 +3,12 @@ import ReactDOM from "react-dom/client";
 import { createStore } from "redux";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const initialState = 0;
+const initialState = { value: 0 };
 
-const reducer = (state = 0, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INCREMENT":
-      return state + 1;
+      return { ...state, value: state.value };
     case "DECREMENT":
       return state - 1;
     case "RANDOM":
@@ -26,18 +26,14 @@ const update = () => {
 };
 
 store.subscribe(update);
-const inc = () => {
-  return {
-    type: "INCREMENT",
-  };
-};
-const dec = () => {
-  return {
-    type: "DECREMENT",
-  };
-};
-const ran = () => {
-  let randomValue = Math.floor(Math.random() * 10);
+const inc = () => ({
+  type: "INCREMENT",
+});
+
+const dec = () => ({
+  type: "DECREMENT",
+});
+const ran = (randomValue) => {
   return {
     type: "RANDOM",
     payload: randomValue,
@@ -52,7 +48,8 @@ document.getElementById("decrement").addEventListener("click", () => {
   store.dispatch(dec());
 });
 document.getElementById("random").addEventListener("click", () => {
-  store.dispatch(ran());
+  let randomValue = Math.floor(Math.random() * 10);
+  store.dispatch(ran(randomValue));
 });
 
 root.render(
