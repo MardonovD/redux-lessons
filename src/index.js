@@ -1,17 +1,64 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createStore } from "redux";
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const initialState = 0;
+
+const reducer = (state = 0, action) => {
+  switch (action.type) {
+    case "INCREMENT":
+      return state + 1;
+    case "DECREMENT":
+      return state - 1;
+    case "RANDOM":
+      return state * action.payload;
+    default:
+      return state;
+  }
+};
+const store = createStore(reducer); //store...
+
+console.log(store);
+
+const update = () => {
+  document.querySelector(".counter").textContent = store.getState();
+};
+
+store.subscribe(update);
+const inc = () => {
+  return {
+    type: "INCREMENT",
+  };
+};
+const dec = () => {
+  return {
+    type: "DECREMENT",
+  };
+};
+const ran = () => {
+  let randomValue = Math.floor(Math.random() * 10);
+  return {
+    type: "RANDOM",
+    payload: randomValue,
+  };
+};
+
+document.getElementById("increment").addEventListener("click", () => {
+  store.dispatch(inc());
+});
+
+document.getElementById("decrement").addEventListener("click", () => {
+  store.dispatch(dec());
+});
+document.getElementById("random").addEventListener("click", () => {
+  store.dispatch(ran());
+});
+
 root.render(
   <React.StrictMode>
-    <App />
+    <></>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// SUBscRiBE--> uzgargan paytini tutib olib bizga aytib turadigan narsa hisoblanadi...
