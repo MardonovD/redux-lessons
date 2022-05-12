@@ -1,61 +1,30 @@
 import React from "react";
 
-import ReactDOM from "react-dom/client";
-
+import ReactDOM from "react-dom";
+import { reducer } from "./redux/reducers";
 import { createStore } from "redux";
-
+import { dec, inc, ran } from "./redux/actions";
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
-const initialState = { value: 0 };
-
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "INCREMENT":
-      return { ...state, value: state.value + 1 };
-    case "DECREMENT":
-      return { ...state, value: state.value - 1 };
-    case "RANDOM":
-      return { ...state, value: state.value * action.payload };
-    default:
-      return state;
-  }
-};
-
 const store = createStore(reducer);
-
-console.log(store);
+const { dispatch, subscribe, getState } = store;
 
 const update = () => {
-  document.querySelector(".counter").textContent = store.getState().value;
+  document.querySelector(".counter").textContent = getState().value;
 };
 
-store.subscribe(update);
-const inc = () => ({
-  type: "INCREMENT",
-});
-
-const dec = () => ({
-  type: "DECREMENT",
-});
-
-const ran = (randomValue) => {
-  return {
-    type: "RANDOM",
-    payload: randomValue,
-  };
-};
+subscribe(update);
 
 document.getElementById("increment").addEventListener("click", () => {
-  store.dispatch(inc());
+  dispatch(inc());
 });
 
 document.getElementById("decrement").addEventListener("click", () => {
-  store.dispatch(dec());
+  dispatch(dec());
 });
 
 document.getElementById("random").addEventListener("click", () => {
   let randomValue = Math.floor(Math.random() * 10);
-  store.dispatch(ran(randomValue));
+  dispatch(ran(randomValue));
 });
 
 root.render(
