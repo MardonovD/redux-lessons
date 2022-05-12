@@ -2,29 +2,29 @@ import React from "react";
 
 import ReactDOM from "react-dom";
 import { reducer } from "./redux/reducers";
-import { createStore } from "redux";
-import { dec, inc, ran } from "./redux/actions";
+import { createStore, bindActionCreators } from "redux";
+import * as actions from "./redux/actions";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const store = createStore(reducer);
 const { dispatch, subscribe, getState } = store;
-
-const update = () => {
+console.log(store);
+subscribe(() => {
   document.querySelector(".counter").textContent = getState().value;
-};
-
-subscribe(update);
-
-document.getElementById("increment").addEventListener("click", () => {
-  dispatch(inc());
 });
 
-document.getElementById("decrement").addEventListener("click", () => {
-  dispatch(dec());
-});
+const { inc, dec, ran } = bindActionCreators(actions, dispatch);
+
+// const incHandler = bindActionCreator(inc, dispatch);
+// const decHandler = bindActionCreator(dec, dispatch);
+
+// const randomHandler = bindActionCreator(ran, dispatch);
+document.getElementById("increment").addEventListener("click", inc);
+
+document.getElementById("decrement").addEventListener("click", dec);
 
 document.getElementById("random").addEventListener("click", () => {
   let randomValue = Math.floor(Math.random() * 10);
-  dispatch(ran(randomValue));
+  ran(randomValue);
 });
 
 root.render(
